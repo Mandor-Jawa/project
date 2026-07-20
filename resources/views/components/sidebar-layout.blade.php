@@ -52,8 +52,11 @@
     </style>
 </head>
 <body class="antialiased text-gray-800 dark:text-slate-200 animated-bg">
-    <div class="flex h-screen overflow-hidden" x-data="{ sidebarOpen: true }">
+    <div class="flex h-screen overflow-hidden" x-data="{ sidebarOpen: window.innerWidth >= 1024 }" @resize.window="sidebarOpen = window.innerWidth >= 1024">
         
+        <!-- Mobile overlay -->
+        <div x-cloak x-show="sidebarOpen" x-transition.opacity @click="sidebarOpen = false" class="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm lg:hidden"></div>
+
         <!-- Premium Sidebar -->
         <aside :class="sidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full w-0'" class="fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] sidebar-glass text-slate-600 dark:text-slate-300 lg:static lg:flex shrink-0 shadow-2xl">
             
@@ -87,13 +90,13 @@
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden min-w-0 relative">
             <!-- Glassmorphism Topbar -->
-            <header class="flex items-center justify-between px-8 py-4 glass-panel m-4 rounded-2xl shadow-sm z-40">
+            <header class="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 glass-panel m-2 sm:m-4 rounded-xl sm:rounded-2xl shadow-sm z-30 relative">
                 <div class="flex items-center">
                     <button @click="sidebarOpen = !sidebarOpen" class="p-2 text-slate-500 rounded-xl hover:bg-slate-100 hover:text-slate-700 focus:outline-none transition-colors duration-200">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
                     </button>
                     @isset($header)
-                        <h1 class="ml-6 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400">{{ $header }}</h1>
+                        <h1 class="ml-4 sm:ml-6 text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 truncate max-w-[150px] sm:max-w-xs">{{ $header }}</h1>
                     @endisset
                 </div>
                 
